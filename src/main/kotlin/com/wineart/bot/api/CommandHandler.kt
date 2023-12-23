@@ -3,13 +3,17 @@ package com.wineart.bot.api
 import com.github.kotlintelegrambot.bot
 import com.github.kotlintelegrambot.dispatch
 import com.github.kotlintelegrambot.dispatcher.command
-import com.github.kotlintelegrambot.entities.ChatId
+import com.wineart.bot.launcher.CommandLauncher
+import com.wineart.bot.model.MessageTexts.StartMarkupsText.*
 import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.stereotype.Controller
+import org.springframework.stereotype.Component
 
-@Controller
-class CommandHandler {
+/*
+ * Основной "получатель команд" и работа с сообщениями
+ */
+@Component
+class CommandHandler(val launch: CommandLauncher) {
 
     @Value("\${auth.bot.token}")
     private lateinit var token: String
@@ -19,9 +23,11 @@ class CommandHandler {
         val bot = bot {
             token = "6926579582:AAFBQTGafqw6CSHzar9BdTXcpwRpO9ANmRc"
             dispatch {
-                command("start") {
-                    val result = bot.sendMessage(chatId = ChatId.fromId(message.chat.id),text = "Здарова заебал")
-                }
+                command(START.s) { launch.start(bot, update) }
+                command(SIGN_LESSON.s) { launch.signLesson(bot, update) }
+                command(TIMETABLE.s) { launch.timeTable(bot, update) }
+                command(BUY_CERTIFICATE.s) { launch.buyCertificate(bot, update) }
+                command(BOOK_DATE.s) { launch.bookDate(bot, update) }
             }
         }
         bot.startPolling()
