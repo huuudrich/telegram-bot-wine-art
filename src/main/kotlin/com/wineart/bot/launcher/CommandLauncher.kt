@@ -1,17 +1,39 @@
 package com.wineart.bot.launcher
 
 import com.github.kotlintelegrambot.Bot
-import com.github.kotlintelegrambot.entities.Update
+import com.github.kotlintelegrambot.dispatch
+import com.github.kotlintelegrambot.dispatcher.text
+import com.wineart.bot.model.MessageTexts.*
+import com.wineart.bot.utils.VoidMessage
 import lombok.NonNull
+import org.springframework.stereotype.Service
 
-interface CommandLauncher {
-    fun start(@NonNull bot: Bot, @NonNull update: Update);
+/*
+ * Лаунчер для делегации запуска логики команд
+ */
+@Service
+class CommandLauncher(
+    val startCommand: VoidMessage
+                     ) {
 
-    fun signLesson(@NonNull bot: Bot, @NonNull update: Update);
-
-    fun timeTable(@NonNull bot: Bot, @NonNull update: Update);
-
-    fun buyCertificate(@NonNull bot: Bot, @NonNull update: Update);
-
-    fun bookDate(@NonNull bot: Bot, @NonNull update: Update);
+    fun execute(@NonNull processBot: Bot.Builder) {
+        processBot.dispatch {
+            text {
+                val map = hashMapOf(
+                    START.s to {
+                        startCommand.execute(bot, update)
+                    },
+                    SIGN_LESSON.s to {
+                    },
+                    TIMETABLE.s to {
+                    },
+                    BUY_CERTIFICATE.s to {
+                    },
+                    BOOK_DATE.s to {
+                    }
+                                   )
+                map[text]?.invoke()
+            }
+        }
+    }
 }
