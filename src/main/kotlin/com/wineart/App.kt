@@ -1,11 +1,11 @@
-package com.wineart.bot
+package com.wineart
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class TelegramBotWineArtApplication
+class App
 
 fun main(args: Array<String>) {
-	runApplication<TelegramBotWineArtApplication>(*args)
+    runApplication<App>(*args)
 }
