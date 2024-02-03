@@ -1,4 +1,4 @@
-package com.wineart.bot
+package com.wineart
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
