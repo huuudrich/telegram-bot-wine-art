@@ -1,6 +1,6 @@
 package com.wineart.model.certificate
 
-enum class CertificateStatus {
-    ACTIVATED,
-    DEACTIVATED
+enum class CertificateStatus(val s: String) {
+    ACTIVATED("✅Активный"),
+    DEACTIVATED("❌Заблокирован")
 }
