@@ -42,6 +42,11 @@ class CommandsHandler(
 
     fun execute(@NonNull processBot: Bot.Builder) {
         processBot.dispatch {
+            callbackQuery {
+                if (callbackQuery.from.id == null) {
+                    initCallBackQuery(callbackQuery, bot)
+                }
+            }
             text {
                 val chatId = update.message?.chat?.id
 
@@ -58,11 +63,6 @@ class CommandsHandler(
                 bot.answerPreCheckoutQuery(preCheckoutQuery.id, ok = true)
 
                 message { paymentProcessingAction.execute(bot, update) }
-            }
-            callbackQuery {
-                if (callbackQuery.from.id == 1112L) {
-                    initCallBackQuery(callbackQuery, bot)
-                }
             }
         }
     }

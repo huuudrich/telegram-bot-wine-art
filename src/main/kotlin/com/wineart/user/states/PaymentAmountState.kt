@@ -15,8 +15,7 @@ import org.springframework.stereotype.Component
 import java.math.BigInteger
 
 @Component
-class PaymentAmountState(private val userService: UserService) : VoidAction<Bot, Update>
- {
+class PaymentAmountState(private val userService: UserService) : VoidAction<Bot, Update> {
 
     @Value("\${shop.provider.token}")
     private lateinit var shopToken: String
@@ -24,8 +23,13 @@ class PaymentAmountState(private val userService: UserService) : VoidAction<Bot,
     private val log = KotlinLogging.logger {}
     override fun execute(bot: Bot, argument: Update) {
         val chatId = argument.message?.chat?.id ?: return
+        var sum: Long? = null
 
-        val sum = argument.message!!.text?.toLong()
+        try {
+            sum = argument.message!!.text?.toLong()
+        } catch (e: NumberFormatException) {
+            log.info { "Ошибка приведения типа" }
+        }
 
         if (sum == null || sum < 1000 || sum > 20000) {
             bot.sendMessage(
