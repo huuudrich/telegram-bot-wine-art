@@ -26,7 +26,7 @@ class StartAdminCommand(
                       )
                              ),
             resizeKeyboard = true,
-            oneTimeKeyboard = true,
+            oneTimeKeyboard = false,
             selective = true
                                                 )
 

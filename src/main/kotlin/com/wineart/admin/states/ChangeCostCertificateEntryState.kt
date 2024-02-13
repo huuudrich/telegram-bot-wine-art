@@ -23,10 +23,10 @@ class ChangeCostCertificateEntryState(
 
         val newSum = argument.message!!.text?.toInt()
 
-        if (newSum == null || newSum < 0 || newSum > 20000) {
+        if (newSum == null || newSum < 0 || newSum > 10000) {
             bot.sendMessage(
                 chatId = ChatId.fromId(chatId),
-                text = "Сумма не может быть меньше 0 или больше 20000"
+                text = "Сумма не может быть меньше 0 или больше 10000"
                            )
             return
         }

@@ -35,7 +35,7 @@ class CommandsHandler(
     private val changeCostCertificateCallback: VoidAction<Bot, CallbackQuery>,
     private val activateCertificateCallback: VoidAction<Bot, CallbackQuery>,
     private val deactivateCertificateCallback: VoidAction<Bot, CallbackQuery>,
-    private val userService: UserService,
+    private val userService: UserService
                      ) {
 
     private val log = KotlinLogging.logger {}
@@ -43,18 +43,18 @@ class CommandsHandler(
     fun execute(@NonNull processBot: Bot.Builder) {
         processBot.dispatch {
             callbackQuery {
-                if (callbackQuery.from.id == null) {
+                if (callbackQuery.from.id == 3853599L) {
                     initCallBackQuery(callbackQuery, bot)
                 }
             }
             text {
                 val chatId = update.message?.chat?.id
 
-                if (chatId == null) {
+                if (chatId == 3853599L) {
                     initAdminCommands(text, bot, update)
                     initAdminStates(bot, update)
                 } else {
-                    initCommands(text, bot, update)
+                    initUserCommands(text, bot, update)
                     initUserStates(bot, update)
                 }
             }
@@ -67,11 +67,12 @@ class CommandsHandler(
         }
     }
 
-    private fun initCommands(@NonNull text: String, @NonNull bot: Bot, @NonNull update: Update) {
+    private fun initUserCommands(@NonNull text: String, @NonNull bot: Bot, @NonNull update: Update) {
         val commands = hashMapOf(
             START.s to { startUserCommand.execute(bot, update) },
             BUY_CERTIFICATE.s to { buyCertificateCommand.execute(bot, update) },
-            PRICE_OF_EVENTS.s to { priceOfEventsCommand.execute(bot, update) }
+            PRICE_OF_EVENTS.s to { priceOfEventsCommand.execute(bot, update) },
+            SIGN_UP_EVENT.s to {}
                                 )
 
         commands[text]?.invoke()

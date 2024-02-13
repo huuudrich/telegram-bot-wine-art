@@ -8,8 +8,7 @@ import com.github.kotlintelegrambot.entities.Update
 import com.github.kotlintelegrambot.entities.keyboard.KeyboardButton
 import com.wineart.service.user.UserService
 import com.wineart.service.user.arguments.CreateOrUpdateArg
-import com.wineart.user.UserCommandsName.BUY_CERTIFICATE
-import com.wineart.user.UserCommandsName.PRICE_OF_EVENTS
+import com.wineart.user.UserCommandsName.*
 import com.wineart.utils.VoidAction
 import org.springframework.context.MessageSource
 import org.springframework.stereotype.Component
@@ -32,7 +31,7 @@ class StartUserCommand(
                       )
                              ),
             resizeKeyboard = true,
-            oneTimeKeyboard = true,
+            oneTimeKeyboard = false,
             selective = true
                                                 )
 
