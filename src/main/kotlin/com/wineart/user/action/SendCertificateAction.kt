@@ -1,4 +1,4 @@
-package com.wineart.action.user
+package com.wineart.user.action
 
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
@@ -23,16 +23,16 @@ import java.io.File
 import java.time.LocalDate
 
 @Component
-class SendCertificateAction : VoidAction {
+class SendCertificateAction : VoidAction<Bot, Update> {
     @Value("\${files.path}")
     private lateinit var path: String
 
     @Value("\${qr.url.page}")
     private lateinit var urlPath: String
-    override fun execute(bot: Bot, update: Update) {
-        val chatId = update.message?.chat?.id ?: return
+    override fun execute(bot: Bot, argument: Update) {
+        val chatId = argument.message?.chat?.id ?: return
 
-        val payment = update.message!!.successfulPayment ?: return
+        val payment = argument.message!!.successfulPayment ?: return
 
         val pdf = generatePdf(payment.providerPaymentChargeId, payment.invoicePayload)
 
@@ -47,8 +47,8 @@ class SendCertificateAction : VoidAction {
 
         val contentStream = PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)
 
-        addText(contentStream, payload, 338.74997F, 375F)
-        addText(contentStream, LocalDate.now().toString(), 146F, 375F)
+        addText(contentStream, payload, 320.74997F, 375F)
+        addText(contentStream, LocalDate.now().toString(), 147F, 375F)
 
         val qrCodeStream = generateQRCode("$urlPath=$paymentId")
         val qrImage = PDImageXObject.createFromByteArray(document, qrCodeStream.toByteArray(), "QR Code")
@@ -65,7 +65,7 @@ class SendCertificateAction : VoidAction {
 
     private fun addText(contentStream: PDPageContentStream, text: String, x: Float, y: Float) {
         contentStream.beginText()
-        contentStream.setFont(PDType1Font.COURIER, 12f)
+        contentStream.setFont(PDType1Font.HELVETICA, 12f)
         contentStream.setNonStrokingColor(Color.WHITE)
         contentStream.newLineAtOffset(x, y)
         contentStream.showText(text)

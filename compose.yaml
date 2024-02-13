@@ -1,9 +1,21 @@
+version: '3.8'
 services:
-  postgres:
-    image: 'postgres:latest'
-    environment:
-      - 'POSTGRES_DB=mydatabase'
-      - 'POSTGRES_PASSWORD=secret'
-      - 'POSTGRES_USER=myuser'
+  redis:
+    image: "redis:alpine"
+    restart: always
+    command: redis-server --save 60 1
     ports:
-      - '5432'
+      - "6379:6379"
+    volumes:
+      - "redis-data:/data"
+
+  bot:
+    build: .
+    ports:
+      - "8080:8080"
+    restart: always
+    depends_on:
+      - redis
+
+volumes:
+  redis-data:

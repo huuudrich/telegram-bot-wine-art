@@ -1,4 +1,4 @@
-package com.wineart.states
+package com.wineart.user.states
 
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
@@ -15,18 +15,24 @@ import org.springframework.stereotype.Component
 import java.math.BigInteger
 
 @Component
-class PaymentAmountState(private val userService: UserService) : VoidAction {
+class PaymentAmountState(private val userService: UserService) : VoidAction<Bot, Update> {
 
     @Value("\${shop.provider.token}")
     private lateinit var shopToken: String
 
     private val log = KotlinLogging.logger {}
-    override fun execute(bot: Bot, update: Update) {
-        val chatId = update.message?.chat?.id ?: return
+    override fun execute(bot: Bot, argument: Update) {
+        val chatId = argument.message?.chat?.id ?: return
+        val sum: Long?
 
-        val sum = update.message!!.text?.toLong()
+        try {
+            sum = argument.message!!.text?.toLong()
+        } catch (e: NumberFormatException) {
+            log.info { "Ошибка приведения типа" }
+            return
+        }
 
-        if (sum == null || sum < 1000 || sum > 20000) {
+        if (sum == null || sum < 2500|| sum > 10000) {
             bot.sendMessage(
                 chatId = ChatId.fromId(chatId),
                 text = "Введите сумму в пределах лимита"
@@ -55,6 +61,6 @@ class PaymentAmountState(private val userService: UserService) : VoidAction {
             ifError = { error -> log.info { "Ошибка при отправке счета: ${error.get()}" } }
                              )
 
-        userService.statusReset(chatId)
+        userService.resetState(chatId)
     }
 }

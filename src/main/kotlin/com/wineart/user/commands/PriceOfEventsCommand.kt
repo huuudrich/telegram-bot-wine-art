@@ -1,4 +1,4 @@
-package com.wineart.commands.user
+package com.wineart.user.commands
 
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
@@ -12,17 +12,17 @@ import org.springframework.stereotype.Component
 import java.io.File
 
 @Component
-class PriceOfEventsCommand(private val sendCertificateAction: VoidAction) : VoidAction {
+class PriceOfEventsCommand(private val sendCertificateAction: VoidAction<Bot, Update>) : VoidAction<Bot, Update> {
     @Value("\${files.path}")
     private lateinit var path: String
-    override fun execute(bot: Bot, update: Update) {
-        sendCertificateAction.execute(bot, update)
+    override fun execute(bot: Bot, argument: Update) {
+        sendCertificateAction.execute(bot, argument)
 
-        val chatId = update.message?.chat?.id ?: return
+        val chatId = argument.message?.chat?.id ?: return
 
         bot.sendMediaGroup(
             chatId = ChatId.fromId(chatId), mediaGroup = MediaGroup.from(media = getPricesPhotos()),
-            replyToMessageId = update.message!!.messageId
+            replyToMessageId = argument.message!!.messageId
                           )
     }
 

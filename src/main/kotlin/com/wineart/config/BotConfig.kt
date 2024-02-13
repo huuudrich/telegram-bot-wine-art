@@ -1,7 +1,8 @@
 package com.wineart.config
 
 import com.github.kotlintelegrambot.bot
-import com.wineart.launcher.CommandsHandler
+import com.github.kotlintelegrambot.logging.LogLevel
+import com.wineart.CommandsHandler
 import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -15,6 +16,7 @@ class BotConfig(val commandsHandler: CommandsHandler) {
     @PostConstruct
     fun init() {
         val bot = bot {
+            logLevel = LogLevel.Error
             token = tokenInit
             commandsHandler.execute(this)
         }
