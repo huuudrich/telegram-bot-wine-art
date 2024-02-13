@@ -44,7 +44,11 @@ jobs:
         username: ${{ secrets.SERVER_USER }}
         password: ${{ secrets.SERVER_PASSWORD }}
         script: |
-          cd /home/telegram-bot-wine-art
-          docker-compose down
-          git pull
-          docker-compose up -d
+              cd /home/telegram-bot-wine-art
+              echo "AUTH_TOKEN=${{ secrets.AUTH_TOKEN }}" > .env
+              echo "SHOP_ID=${{ secrets.SHOP_ID }}" >> .env
+              echo "SERVER_HOST=${{ secrets.SERVER_HOST }}" >> .env
+              echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
+              docker-compose down
+              git pull
+              docker-compose up -d
