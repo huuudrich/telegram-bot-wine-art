@@ -43,7 +43,7 @@ class SendCertificateAction : VoidAction<Bot, Update> {
 
     private fun generatePdf(paymentId: String, payload: String): File {
         val document = PDDocument.load(File("$path/certificate.pdf"))
-        val page = document.getPage(0)
+        val page = document.getPage(1)
 
         val contentStream = PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true)
 
