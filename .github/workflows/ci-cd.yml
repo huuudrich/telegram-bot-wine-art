@@ -28,8 +28,10 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
 
-    - name: Build Docker image
-      run: docker-compose build --no-cache
+    - name: Build and push Docker image
+      run: |
+        docker build -t myimage:${{ github.sha }} .
+        docker push myimage:${{ github.sha }}
 
   deploy:
     needs: build
@@ -51,4 +53,5 @@ jobs:
               echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
               docker-compose down
               git pull
+              docker pull
               docker-compose up -d --force-recreate
