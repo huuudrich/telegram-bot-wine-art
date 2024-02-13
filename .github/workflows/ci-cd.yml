@@ -51,5 +51,4 @@ jobs:
               echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
               docker-compose down
               git pull
-              docker-compose pull
-              docker-compose up -d
+              docker-compose up -d --force-recreate
