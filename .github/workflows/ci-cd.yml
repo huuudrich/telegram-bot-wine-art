@@ -29,7 +29,7 @@ jobs:
       run: ./gradlew build
 
     - name: Build Docker image
-      run: compose build
+      run: docker-compose build
 
   deploy:
     needs: build
