@@ -44,7 +44,7 @@ jobs:
         username: ${{ secrets.SERVER_USER }}
         password: ${{ secrets.SERVER_PASSWORD }}
         script: |
-          cd project/telegram-bot-wine-art
+          cd /home/telegram-bot-wine-art
           docker-compose down
           git pull
           docker-compose up -d
