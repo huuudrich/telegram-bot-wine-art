@@ -3,7 +3,7 @@ services:
   redis:
     image: "redis:alpine"
     restart: always
-    command: redis-server --save 60 1
+    command: redis-server --save 60 1 --requirepass ${REDIS_PASSWORD}
     ports:
       - "6379:6379"
     volumes:
@@ -20,6 +20,7 @@ services:
       - SHOP_ID=${SHOP_ID}
       - REDIS_HOST=${SERVER_HOST}
       - REDIS_PORT=${REDIS_PORT}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
     depends_on:
       - redis
 

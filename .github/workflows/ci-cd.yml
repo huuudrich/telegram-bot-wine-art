@@ -58,6 +58,7 @@ jobs:
               echo "SHOP_ID=${{ secrets.SHOP_ID }}" >> .env
               echo "SERVER_HOST=${{ secrets.SERVER_HOST }}" >> .env
               echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
+              echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> .env
               echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> .env
               docker-compose down
               git pull

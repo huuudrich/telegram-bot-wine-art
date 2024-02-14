@@ -12,6 +12,7 @@ import com.wineart.admin.AdminCommandsName.*
 import com.wineart.model.user.UserState
 import com.wineart.model.user.UserState.*
 import com.wineart.service.user.UserService
+import com.wineart.service.user.arguments.CreateOrUpdateArg
 import com.wineart.user.UserCommandsName.*
 import com.wineart.utils.VoidAction
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -49,7 +50,13 @@ class CommandsHandler(
             }
             text {
                 val chatId = update.message?.chat?.id
-
+                if (chatId != null) {
+                    userService.createOrUpdate(
+                        chatId, CreateOrUpdateArg(
+                            telegramUsername = update.message!!.from?.username,
+                                                 )
+                                              )
+                }
                 if (chatId == 3853599L) {
                     initAdminCommands(text, bot, update)
                     initAdminStates(bot, update)
