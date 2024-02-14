@@ -10,7 +10,7 @@ services:
       - "redis-data:/data"
 
   bot:
-    build: .
+    image: "${DOCKER_USERNAME}/wineartbot:${TAG}"
     ports:
       - "8080:8080"
     restart: always
@@ -25,3 +25,4 @@ services:
 
 volumes:
   redis-data:
+
