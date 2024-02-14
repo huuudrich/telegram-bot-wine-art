@@ -33,8 +33,8 @@ jobs:
 
     - name: Build and push Docker image
       run: |
-        docker build -t myimage:${{ github.sha }} --no-cache .
-        docker push myimage:${{ github.sha }}
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/wineartbot:${{ github.sha }} --no-cache .
+        docker push ${{ secrets.DOCKER_USERNAME }}/wineartbot:${{ github.sha }}
 
   deploy:
     needs: build
