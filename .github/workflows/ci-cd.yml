@@ -52,6 +52,7 @@ jobs:
         username: ${{ secrets.SERVER_USER }}
         password: ${{ secrets.SERVER_PASSWORD }}
         script: |
+              export TAG=${{ github.sha }}
               cd /home/telegram-bot-wine-art
               echo "AUTH_TOKEN=${{ secrets.AUTH_TOKEN }}" > .env
               echo "SHOP_ID=${{ secrets.SHOP_ID }}" >> .env
