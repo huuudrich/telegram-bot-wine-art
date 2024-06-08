@@ -1,7 +1,0 @@
-package com.wineart.model.user
-
-enum class UserState {
-    USER_PAYMENT_AMOUNT_CERTIFICATE,
-    ADMIN_PAYMENT_NUMBER_ENTRY,
-    ADMIN_CHANGE_COST_CERTIFICATE_ENTRY,
-}

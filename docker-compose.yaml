@@ -15,7 +15,6 @@ services:
     restart: always
     environment:
       - AUTH_TOKEN=${AUTH_TOKEN}
-      - FILES_PATH=./files
       - SHOP_ID=${SHOP_ID}
       - REDIS_HOST=${SERVER_HOST}
       - REDIS_PORT=${REDIS_PORT}
