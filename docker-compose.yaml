@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  redis:
+    image: "redis:alpine"
+    restart: always
+    command: redis-server /etc/redis/redis.conf --save 60 1 --requirepass ${REDIS_PASSWORD}
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
+    volumes:
+      - "redis-data:/data"
+      - "./etc/redis/redis.conf:/etc/redis/redis.conf"
+
+  bot:
+    image: "${DOCKER_USERNAME}/wineartbot:${TAG}"
+    restart: always
+    environment:
+      - AUTH_TOKEN=${AUTH_TOKEN}
+      - SHOP_ID=${SHOP_ID}
+      - REDIS_HOST=${SERVER_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    depends_on:
+      - redis
+
+volumes:
+  redis-data:
+

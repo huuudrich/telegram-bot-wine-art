@@ -1,0 +1,66 @@
+name: CI/CD Pipeline  
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs: 
+  build:
+    runs-on: ubuntu-latest
+    
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v2
+      with:
+        java-version: '17'
+        distribution: 'adopt'
+    
+    - name: Build with Gradle
+      run: ./gradlew build
+
+    - name: Log in to Docker Hub
+      run: echo "${{ secrets.DOCKER_AUTH_TOKEN }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+    - name: Build and push Docker image
+      run: |
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/wineartbot:${{ github.sha }} --no-cache .
+        docker push ${{ secrets.DOCKER_USERNAME }}/wineartbot:${{ github.sha }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Log in to Docker Hub
+      run: echo "${{ secrets.DOCKER_AUTH_TOKEN }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+    - name: Deploy to Server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        password: ${{ secrets.SERVER_PASSWORD }}
+        script: |
+              export TAG=${{ github.sha }}
+              cd /home/telegram-bot-wine-art
+              echo "AUTH_TOKEN=${{ secrets.AUTH_TOKEN }}" > .env
+              echo "SHOP_ID=${{ secrets.SHOP_ID }}" >> .env
+              echo "SERVER_HOST=${{ secrets.SERVER_HOST }}" >> .env
+              echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
+              echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> .env
+              echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> .env
+              docker-compose down
+              git pull
+              docker-compose pull
+              docker-compose up -d --force-recreate
